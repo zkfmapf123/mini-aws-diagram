@@ -1,6 +1,6 @@
 # aws diagram set
 
-![diagram](./public/diragram.png)
+![diagram](./public/diagram.png)
 
 ## desc
 
