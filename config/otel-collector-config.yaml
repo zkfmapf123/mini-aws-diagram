@@ -6,20 +6,12 @@ receivers:
       http:
         endpoint: 0.0.0.0:4318
 
-  # AWS X-Ray 추적 수신기 추가
-  awsxray:
-    endpoint: 0.0.0.0:2000
-    transport: udp
-
 processors:
   batch:
-
-  # 리소스 탐지기 추가
   resourcedetection:
     detectors: [aws]
     timeout: 10s
 
-  # AWS 리소스 메타데이터 처리기
   attributes:
     actions:
       - key: aws.resource.type
@@ -46,13 +38,7 @@ exporters:
   mysql/aws_resources:
     dsn: "root:1234@tcp(mysql:3306)/traces"
     timeout: 10s
-    sql_statement: "INSERT INTO aws_resources (id, resource_type, name, region, account_id) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE resource_type=VALUES(resource_type), name=VALUES(name), region=VALUES(region), account_id=VALUES(account_id)"
-
-  # 관계 익스포터 추가
-  mysql/relationships:
-    dsn: "root:1234@tcp(mysql:3306)/traces"
-    timeout: 10s
-    sql_statement: "INSERT INTO resource_relationships (source_id, target_id, relationship_type, metadata) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE metadata=VALUES(metadata)"
+    sql_statement: "INSERT INTO aws_resources (resource_type, name, region, account_id) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE resource_type=VALUES(resource_type), name=VALUES(name), region=VALUES(region), account_id=VALUES(account_id)"
 
 service:
   pipelines:

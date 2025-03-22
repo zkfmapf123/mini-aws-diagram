@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS aws_resources (
-    id VARCHAR(255) PRIMARY KEY,
+    id VARCHAR(255) PRIMARY KEY AUTO_INCREMENT,
     resource_type VARCHAR(100) NOT NULL,
     name VARCHAR(255),
     region VARCHAR(50),
