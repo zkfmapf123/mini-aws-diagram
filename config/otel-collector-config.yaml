@@ -1,25 +1,62 @@
- receivers:
-     otlp:
-       protocols:
-         grpc:
-           endpoint: 0.0.0.0:4317
-         http:
-           endpoint: 0.0.0.0:4318
-   
-   processors:
-     batch:
-   
-   exporters:
-     logging:
-       loglevel: debug
-     mysql:
-       dsn: "root:1234@tcp(mysql:3306)/traces"
-       timeout: 10s
-       sql_statement: "INSERT INTO traces (...) VALUES (...)"
-   
-   service:
-     pipelines:
-       traces:
-         receivers: [otlp]
-         processors: [batch]
-         exporters: [logging, mysql]
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  # AWS X-Ray 추적 수신기 추가
+  awsxray:
+    endpoint: 0.0.0.0:2000
+    transport: udp
+
+processors:
+  batch:
+
+  # 리소스 탐지기 추가
+  resourcedetection:
+    detectors: [aws]
+    timeout: 10s
+
+  # AWS 리소스 메타데이터 처리기
+  attributes:
+    actions:
+      - key: aws.resource.type
+        action: upsert
+        from_attribute: resource.type
+      - key: aws.account.id
+        action: upsert
+        from_attribute: cloud.account.id
+      - key: aws.region
+        action: upsert
+        from_attribute: cloud.region
+
+exporters:
+  logging:
+    loglevel: debug
+
+  # MySQL 익스포터 설정 업데이트
+  mysql:
+    dsn: "root:1234@tcp(mysql:3306)/traces"
+    timeout: 10s
+    sql_statement: "INSERT INTO traces (trace_id, span_id, parent_span_id, resource_id, name, start_time, end_time, status_code, status_message, attributes, events) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  # AWS 리소스 익스포터 추가
+  mysql/aws_resources:
+    dsn: "root:1234@tcp(mysql:3306)/traces"
+    timeout: 10s
+    sql_statement: "INSERT INTO aws_resources (id, resource_type, name, region, account_id) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE resource_type=VALUES(resource_type), name=VALUES(name), region=VALUES(region), account_id=VALUES(account_id)"
+
+  # 관계 익스포터 추가
+  mysql/relationships:
+    dsn: "root:1234@tcp(mysql:3306)/traces"
+    timeout: 10s
+    sql_statement: "INSERT INTO resource_relationships (source_id, target_id, relationship_type, metadata) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE metadata=VALUES(metadata)"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp, awsxray]
+      processors: [batch, resourcedetection, attributes]
+      exporters: [logging, mysql, mysql/aws_resources, mysql/relationships]

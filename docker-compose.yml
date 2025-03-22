@@ -14,6 +14,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./config/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:latest
@@ -21,11 +22,12 @@ services:
     host_name: otel
     user: otel
     volumes:
-      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: ["--config=/etc/otel-collector-config.yaml"]
     ports:
       - "4317:4317"
       - "4318:4318"
+      - "2000:2000/udp"
     depends_on:
       - mysql
 
