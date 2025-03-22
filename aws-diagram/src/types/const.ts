@@ -1,0 +1,7 @@
+export const CONST_VARS = {
+  API_BASE_URL: "/api",
+  MIN_DELAY: 300,
+  MAX_DELAY: 800,
+
+  REFRESH_INTERVAL: 10000,
+};

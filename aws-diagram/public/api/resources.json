@@ -1,0 +1,34 @@
+{
+  "resources": [
+    {
+      "id": "ec2-1",
+      "type": "EC2",
+      "name": "Web Server",
+      "description": "웹 서버 인스턴스"
+    },
+    {
+      "id": "s3-1",
+      "type": "S3",
+      "name": "Static Assets",
+      "description": "정적 자산 저장소"
+    },
+    {
+      "id": "rds-1",
+      "type": "RDS",
+      "name": "Database",
+      "description": "메인 데이터베이스"
+    },
+    {
+      "id": "lambda-1",
+      "type": "LAMBDA",
+      "name": "Processing Function",
+      "description": "데이터 처리 함수"
+    },
+    {
+      "id": "dynamodb-1",
+      "type": "DYNAMODB",
+      "name": "User Data",
+      "description": "사용자 데이터 테이블"
+    }
+  ]
+}

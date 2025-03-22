@@ -1,0 +1,65 @@
+{
+  "diagram": {
+    "id": "default",
+    "name": "AWS 클라우드 아키텍처",
+    "description": "기본 AWS 아키텍처 다이어그램",
+    "resources": [
+      {
+        "id": "ec2-1",
+        "type": "EC2",
+        "name": "Web Server",
+        "description": "웹 서버 인스턴스"
+      },
+      {
+        "id": "s3-1",
+        "type": "S3",
+        "name": "Static Assets",
+        "description": "정적 자산 저장소"
+      },
+      {
+        "id": "rds-1",
+        "type": "RDS",
+        "name": "Database",
+        "description": "메인 데이터베이스"
+      },
+      {
+        "id": "lambda-1",
+        "type": "LAMBDA",
+        "name": "Processing Function",
+        "description": "데이터 처리 함수"
+      },
+      {
+        "id": "dynamodb-1",
+        "type": "DYNAMODB",
+        "name": "User Data",
+        "description": "사용자 데이터 테이블"
+      }
+    ],
+    "connections": [
+      {
+        "id": "conn-1",
+        "source": "ec2-1",
+        "target": "s3-1",
+        "label": "정적 자산 요청"
+      },
+      {
+        "id": "conn-2",
+        "source": "ec2-1",
+        "target": "rds-1",
+        "label": "데이터 조회/저장"
+      },
+      {
+        "id": "conn-3",
+        "source": "ec2-1",
+        "target": "lambda-1",
+        "label": "함수 호출"
+      },
+      {
+        "id": "conn-4",
+        "source": "lambda-1",
+        "target": "dynamodb-1",
+        "label": "사용자 데이터 처리"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "connections": [
+    {
+      "id": "conn-1",
+      "source": "ec2-1",
+      "target": "s3-1",
+      "label": "정적 자산 요청"
+    },
+    {
+      "id": "conn-2",
+      "source": "ec2-1",
+      "target": "rds-1",
+      "label": "데이터 조회/저장"
+    },
+    {
+      "id": "conn-3",
+      "source": "ec2-1",
+      "target": "lambda-1",
+      "label": "함수 호출"
+    },
+    {
+      "id": "conn-4",
+      "source": "lambda-1",
+      "target": "dynamodb-1",
+      "label": "사용자 데이터 처리"
+    }
+  ]
+}
