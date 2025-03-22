@@ -15,6 +15,7 @@ import S3Icon from "react-aws-icons/dist/aws/logo/S3";
 import SNSIcon from "react-aws-icons/dist/aws/logo/SNS";
 import SQSIcon from "react-aws-icons/dist/aws/logo/SQS";
 import VPCIcon from "react-aws-icons/dist/aws/logo/VPC";
+import UnknownIcon from "../assets/logo192.png";
 
 const resourceColorMap: Record<
   AwsResourceType,
@@ -35,6 +36,7 @@ const resourceColorMap: Record<
   [AwsResourceType.SECURITY_GROUP]: { bg: "#248814", border: "#1A6B0D" },
   [AwsResourceType.ELB]: { bg: "#FF9900", border: "#FF8000" },
   [AwsResourceType.CLOUDWATCH]: { bg: "#A166FF", border: "#8F44FF" },
+  [AwsResourceType.UNKNOWN]: { bg: "#CCCCCC", border: "#AAAAAA" },
 };
 
 // AWS 리소스 아이콘 컴포넌트
@@ -71,6 +73,10 @@ const AwsIcon: React.FC<{ type: AwsResourceType; size?: number }> = ({
         return <ELBIcon size={size} />;
       case AwsResourceType.CLOUDWATCH:
         return <CloudWatchIcon size={size} />;
+      case AwsResourceType.UNKNOWN:
+        return (
+          <img src={UnknownIcon} alt="Unknown" width={size} height={size} />
+        );
       default:
         return <div>{type.charAt(0)}</div>;
     }

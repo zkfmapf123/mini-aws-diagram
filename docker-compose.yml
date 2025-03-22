@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    host_name: mysql
+    user: mysql
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: traces
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel
+    host_name: otel
+    user: otel
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:

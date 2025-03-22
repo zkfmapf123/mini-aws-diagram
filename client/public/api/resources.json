@@ -29,6 +29,12 @@
       "type": "DYNAMODB",
       "name": "User Data",
       "description": "사용자 데이터 테이블"
+    },
+    {
+      "id": "unknown-11",
+      "type": "UNKNOWN",
+      "name": "로컬 Functions",
+      "description": "테스트 함수"
     }
   ]
 }

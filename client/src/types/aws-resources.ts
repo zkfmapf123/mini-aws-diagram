@@ -14,6 +14,7 @@ export enum AwsResourceType {
   SECURITY_GROUP = "SECURITY_GROUP",
   ELB = "ELB",
   CLOUDWATCH = "CLOUDWATCH",
+  UNKNOWN = "UNKNOWN",
 }
 
 export interface AwsResource {
